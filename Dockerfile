@@ -1,6 +1,6 @@
 # Note change this to your preference
-ARG UBUNTU_VERSION=22.04
-FROM ubuntu:${UBUNTU_VERSION}
+ARG VERSION=stable-backports
+FROM debian:${VERSION}
 
 LABEL maintainer="rjbaw"
 ENV DEBIAN_FRONTEND=noninteractive 
@@ -10,7 +10,8 @@ ENV DGID=1000
 ENV DUID=1000
 
 RUN apt-get update && apt-get dist-upgrade -y 
-RUN apt-get install -y --no-install-recommends \
+RUN apt-get install -y\
+    --no-install-recommends \
     devscripts \
     checkinstall \
     software-properties-common \
@@ -97,7 +98,7 @@ RUN cd /tmp && \
     --with-harfbuzz \
     CFLAGS='-O3 -march=native' \
     make -j $(nproc) &&\
-    checkinstall
+    make install
 
 RUN cd /tmp &&\
     curl https://julialang-s3.julialang.org/bin/linux/x64/1.8/julia-1.8.1-linux-x86_64.tar.gz -so julia.tar.gz &&\
